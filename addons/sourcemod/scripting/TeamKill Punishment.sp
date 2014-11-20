@@ -34,30 +34,39 @@ public Action: OnPlayerDead(Handle:event, const String:name[], bool:dontBroadcas
 	if(IsValidPlayer(victim) && IsValidPlayer(attacker) && victim != attacker)
 	{
 		new Handle:PunishmentMenu = CreateMenu(PunishmentList);
+		
 		decl String: MenuTitle[32];
 		Format(MenuTitle, sizeof(MenuTitle), "%T", "Punishment menu title");
 		SetMenuTitle(PunishmentMenu, MenuTitle);
+		
 		decl String: Forgive[32];
 		Format(Forgive, sizeof(Forgive), "%T", "Forgive");
 		AddMenuItem(PunishmentMenu, "Forgive", Forgive);
+		
 		decl String: Slay[32];
 		Format(Slay, sizeof(Slay), "%T", "Slay");
 		AddMenuItem(PunishmentMenu, "Slay", Slay);
+		
 		decl String: Freeze[32];
 		Format(Freeze, sizeof(Freeze), "%T", "Freeze");
 		AddMenuItem(PunishmentMenu, "Freeze", Freeze);
+		
 		decl String: BreakLeg[32];
 		Format(BreakLeg, sizeof(BreakLeg), "%T", "BreakLeg");
 		AddMenuItem(PunishmentMenu, "BreakLeg", BreakLeg);
+		
 		decl String: Health[32];
 		Format(Health, sizeof(Health), "%T", "Health");
 		AddMenuItem(PunishmentMenu, "10HP", Health);
+		
 		decl String: Rob[32];
 		Format(Rob, sizeof(Rob), "%T", "Rob");
 		AddMenuItem(PunishmentMenu, "Rob", Rob);
+		
 		decl String: Reincarnation[32];
 		Format(Reincarnation, sizeof(Reincarnation), "%T", "Reincarnation");
 		AddMenuItem(PunishmentMenu, "Reincarnation", Reincarnation);
+		
 		DisplayMenu(PunishmentMenu, victim, MENU_TIME_FOREVER);
 		SetMenuExitBackButton(PunishmentMenu, true);
 		
