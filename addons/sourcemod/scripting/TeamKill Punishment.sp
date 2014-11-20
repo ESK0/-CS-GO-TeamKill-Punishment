@@ -10,8 +10,6 @@
 
 new Handle: PunishmentDataPack;
 
-static String: ConfigPath[PLATFORM_MAX_PATH];
-
 public Plugin:myinfo = 
 {
 	name = "Teamkill punishment",
@@ -26,6 +24,8 @@ public OnPluginStart()
 	new Handle:cvar = FindConVar("mp_autokick");
 	SetConVarString(cvar, "mp_autokick 0");
 	HookEvent("player_dead", OnPlayerDead);
+	
+	LoadTranslations("TeamKillPunishment.phrases");
 }
 public Action: OnPlayerDead(Handle:event, const String:name[], bool:dontBroadcast)
 {
@@ -34,14 +34,30 @@ public Action: OnPlayerDead(Handle:event, const String:name[], bool:dontBroadcas
 	if(IsValidPlayer(victim) && IsValidPlayer(attacker) && victim != attacker)
 	{
 		new Handle:PunishmentMenu = CreateMenu(PunishmentList);
-		SetMenuTitle(PunishmentMenu, "Punishment list");
-		AddMenuItem(PunishmentMenu, "Forgive", "Forgive");
-		AddMenuItem(PunishmentMenu, "Slay", "Slay");
-		AddMenuItem(PunishmentMenu, "Freeze", "Freeze");
-		AddMenuItem(PunishmentMenu, "BreakLeg", "Break one leg");
-		AddMenuItem(PunishmentMenu, "10HP", "10 Health");
-		AddMenuItem(PunishmentMenu, "Rob", "Rob");
-		AddMenuItem(PunishmentMenu, "Reincarnation", "Reincarnation");
+		decl String: MenuTitle[32];
+		Format(MenuTitle, sizeof(MenuTitle), "%T", "Punishment menu title");
+		SetMenuTitle(PunishmentMenu, MenuTitle);
+		decl String: Forgive[32];
+		Format(Forgive, sizeof(Forgive), "%T", "Forgive");
+		AddMenuItem(PunishmentMenu, "Forgive", Forgive);
+		decl String: Slay[32];
+		Format(Slay, sizeof(Slay), "%T", "Slay");
+		AddMenuItem(PunishmentMenu, "Slay", Slay);
+		decl String: Freeze[32];
+		Format(Freeze, sizeof(Freeze), "%T", "Freeze");
+		AddMenuItem(PunishmentMenu, "Freeze", Freeze);
+		decl String: BreakLeg[32];
+		Format(BreakLeg, sizeof(BreakLeg), "%T", "BreakLeg");
+		AddMenuItem(PunishmentMenu, "BreakLeg", BreakLeg);
+		decl String: Health[32];
+		Format(Health, sizeof(Health), "%T", "Health");
+		AddMenuItem(PunishmentMenu, "10HP", Health);
+		decl String: Rob[32];
+		Format(Rob, sizeof(Rob), "%T", "Rob");
+		AddMenuItem(PunishmentMenu, "Rob", Rob);
+		decl String: Reincarnation[32];
+		Format(Reincarnation, sizeof(Reincarnation), "%T", "Reincarnation");
+		AddMenuItem(PunishmentMenu, "Reincarnation", Reincarnation);
 		DisplayMenu(PunishmentMenu, victim, MENU_TIME_FOREVER);
 		SetMenuExitBackButton(PunishmentMenu, true);
 		

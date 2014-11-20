@@ -1,0 +1,44 @@
+﻿"Phrases"
+{
+	"Punishment menu title"
+	{
+		"en"		"Punishment list"
+		"cz"		"Seznam trestů"
+	}
+	"Forgive"
+	{
+		"en"		"Forgive"
+		"cz"		"Odpustit"
+	}
+	"Slay"
+	{
+		"en"		"Slay"
+		"cz"		"Zabít"
+	}
+	"Freeze"
+	{
+		"en"		"Freeze"
+		"cz"		"Zmrazit"
+	}
+	"BreakLeg"
+	{
+		"en"		"Break one leg"
+		"cz"		"Zlomit mu nohu"
+	}
+	"Health"
+	{
+		"en"		"10HP"
+		"cz"		"Otrávit na 10HP"
+	}
+	"Rob"
+	{
+		"en"		"Rob"
+		"cz"		"Okrást"
+	}
+	"Reincarnation"
+	{
+		"en"		"Reincarnation"
+		"cz"		"Reinkarnace"
+	}
+
+}
