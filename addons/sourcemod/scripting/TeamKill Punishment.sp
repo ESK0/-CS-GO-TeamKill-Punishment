@@ -9,6 +9,7 @@
 #define g_sTag "[TK-Punishment]"
 
 new Handle: PunishmentDataPack;
+new g_iAccount;
 
 public Plugin:myinfo = 
 {
@@ -21,50 +22,52 @@ public Plugin:myinfo =
 
 public OnPluginStart()
 {
+	g_iAccount = FindSendPropOffs("CCSPlayer", "m_iAccount");
 	new Handle:cvar = FindConVar("mp_autokick");
 	SetConVarString(cvar, "mp_autokick 0");
 	HookEvent("player_death", OnPlayerDead);
 	
+	LoadTranslations("common.phrases.txt");
 	LoadTranslations("TeamKillPunishment.phrases");
 }
 public Action: OnPlayerDead(Handle:event, const String:name[], bool:dontBroadcast)
 {
 	new victim = GetClientOfUserId(GetEventInt(event, "userid"));
 	new attacker = GetClientOfUserId(GetEventInt(event, "attacker"));
-	if(IsValidPlayer(victim) && IsValidPlayer(attacker) && victim != attacker)
+	if(IsValidPlayer(victim) && IsValidPlayer(attacker) && victim != attacker && GetClientTeam(victim) == GetClientTeam(attacker))
 	{
 		new Handle:PunishmentMenu = CreateMenu(PunishmentList);
 		
 		decl String: MenuTitle[32];
-		Format(MenuTitle, sizeof(MenuTitle), "%T", "Punishment menu title");
+		Format(MenuTitle, sizeof(MenuTitle), "%T", "Punishment menu title", victim);
 		SetMenuTitle(PunishmentMenu, MenuTitle);
 		
 		decl String: Forgive[32];
-		Format(Forgive, sizeof(Forgive), "%T", "Forgive");
+		Format(Forgive, sizeof(Forgive), "%T", "Forgive", victim);
 		AddMenuItem(PunishmentMenu, "Forgive", Forgive);
 		
 		decl String: Slay[32];
-		Format(Slay, sizeof(Slay), "%T", "Slay");
+		Format(Slay, sizeof(Slay), "%T", "Slay", victim);
 		AddMenuItem(PunishmentMenu, "Slay", Slay);
 		
 		decl String: Freeze[32];
-		Format(Freeze, sizeof(Freeze), "%T", "Freeze");
+		Format(Freeze, sizeof(Freeze), "%T", "Freeze", victim);
 		AddMenuItem(PunishmentMenu, "Freeze", Freeze);
 		
 		decl String: BreakLeg[32];
-		Format(BreakLeg, sizeof(BreakLeg), "%T", "BreakLeg");
+		Format(BreakLeg, sizeof(BreakLeg), "%T", "BreakLeg", victim);
 		AddMenuItem(PunishmentMenu, "BreakLeg", BreakLeg);
 		
 		decl String: Health[32];
-		Format(Health, sizeof(Health), "%T", "Health");
+		Format(Health, sizeof(Health), "%T", "Health", victim);
 		AddMenuItem(PunishmentMenu, "10HP", Health);
 		
 		decl String: Rob[32];
-		Format(Rob, sizeof(Rob), "%T", "Rob");
+		Format(Rob, sizeof(Rob), "%T", "Rob", victim);
 		AddMenuItem(PunishmentMenu, "Rob", Rob);
 		
 		decl String: Reincarnation[32];
-		Format(Reincarnation, sizeof(Reincarnation), "%T", "Reincarnation");
+		Format(Reincarnation, sizeof(Reincarnation), "%T", "Reincarnation", victim);
 		AddMenuItem(PunishmentMenu, "Reincarnation", Reincarnation);
 		
 		DisplayMenu(PunishmentMenu, victim, MENU_TIME_FOREVER);
@@ -116,20 +119,20 @@ public PunishmentList(Handle:PunishmentList, MenuAction:action, client, Position
 		}
 		else if(StrEqual(Item, "Rob"))
 		{
-			new AttackerWallet = GetEntProp(attacker, Prop_Data, "m_iAccount");
-			new VictimWallet = GetEntProp(victim, Prop_Data, "m_iAccount");
+			new AttackerWallet = GetEntData(attacker, g_iAccount);
+			new VictimWallet = GetEntData(victim, g_iAccount);
 			
-			SetEntProp(attacker, Prop_Data, "m_iAccount", 0);
 			if(VictimWallet + AttackerWallet > 16000)
 			{
-				SetEntProp(victim, Prop_Data, "m_iAccount", 16000);
+				SetEntData(victim, g_iAccount, 16000);
 			}
 			else
 			{
-				SetEntProp(victim, Prop_Data, "m_iAccount", AttackerWallet + VictimWallet);
+				SetEntData(victim, g_iAccount, AttackerWallet + VictimWallet);
 			}
-			PrintToChat(attacker, "%s %N poisoned you to 10HP", g_sTag, victim);
-			PrintToChat(victim, "%s You robbed %N, You earned $%d", g_sTag, attacker, AttackerWallet); 
+			PrintToChat(attacker, "%s You have been robbed by %N", g_sTag, victim);
+			PrintToChat(victim, "%s You robbed %N, You earned $%d", g_sTag, attacker, AttackerWallet);
+			SetEntData(attacker, g_iAccount, 0);
 		}
 		else if(StrEqual(Item, "Reincarnation"))
 		{
