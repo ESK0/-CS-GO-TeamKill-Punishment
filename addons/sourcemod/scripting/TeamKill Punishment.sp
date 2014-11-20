@@ -23,7 +23,7 @@ public OnPluginStart()
 {
 	new Handle:cvar = FindConVar("mp_autokick");
 	SetConVarString(cvar, "mp_autokick 0");
-	HookEvent("player_dead", OnPlayerDead);
+	HookEvent("player_death", OnPlayerDead);
 	
 	LoadTranslations("TeamKillPunishment.phrases");
 }
